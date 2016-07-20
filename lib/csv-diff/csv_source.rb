@@ -88,11 +88,12 @@ class CSVDiff
         #  case-insensitive comparisons.
         def initialize(source, options = {})
             if source.is_a?(String)
-                require 'csv'
+                require 'ccsv'
                 mode_string = options[:encoding] ? "r:#{options[:encoding]}" : 'r'
                 csv_options = options.fetch(:csv_options, {})
                 @path = source
-                source = CSV.open(@path, mode_string, csv_options).readlines
+                source = []
+                Ccsv.foreach(@path) {|l| source << l}
             end
             if kf = options.fetch(:key_field, options[:key_fields])
                 @key_fields = [kf].flatten
